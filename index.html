@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="jqueryform.com">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+  <title>Contribute to H-Unique</title>
+  <link rel="manifest" href="/manifest.json">
+
+
+  <link rel="stylesheet" href="css/bootstrap.css">
+  <link rel="stylesheet" href="jq/jquery-ui.css">
+  <script src="js/jquery-3.4.1.js"></script>
+  <script src="jq/jquery-ui.js"></script>
+
+  <script src="js/hunique.js"></script>
+  
+  <link rel="stylesheet" href="jq/jquery-ui.theme.css">
+  <link rel="stylesheet" href="css/hunique.css">
+  <link rel="stylesheet" href="css/camera.css">
+
+  <script>
+    $(function () {
+      $(":radio").checkboxradio({
+        icon: false
+      });
+      $(":checkbox").checkboxradio({
+        icon: true
+      });
+    });
+  </script>
+</head>
+
+<body>
+
+  <!--Camera control panel: displayed for each hand image capture-->
+  <div id="viewFinder" class="viewFinder" style="display: none">
+    <!-- Camera -->
+    <main id="camera">
+        <!--Camera Sensor-->
+        <canvas id="camera--sensor"></canvas>
+
+        <!-- Camera view -->
+        <video id="camera--view" autoplay playsinline></video>
+
+        <!-- Camera output -->
+        <img src="//:0" alt="" id="camera--output">
+
+        
+    </main>
+
+    <div id="overlay" class="overlay">
+      <!-- Camera trigger -->
+      <button id="camera--trigger" style="z-index: 101">Take a picture</button>
+    </div>
+  
+    
+  </div>
+  <script src="js/camera.js"></script>
+
+  <div id="splash" class="splash" style="display: inline-block" onclick="doBegin()">
+    <div>
+      <img src="images/huqlogo.png"
+        style="border-style: solid; border-width: 1px; border-color: whitesmoke; border-radius: 5px">
+    </div>
+    <div class="infoPanel">
+      <h4>H-Unique</h4>
+      <p>Tap to begin</p>
+    </div>
+
+  </div>
+
+  <!--Start of Data capture-->
+  <div class="container" id="form" style="display: none">
+
+    <!--Introduction-->
+    <div id="1" class="panel">
+      <h4>Introduction</h4>
+      <p> Thank you for contributing data to the H-Unique research. On this page we will guide you through the
+        submission of
+        photographs of your hands and the collection of supporting information.
+      </p>
+      <p>Information is grouped in four sections which can be accessed by clicking on the section headings below. The
+        minimum information we
+        require for the project is three images per hand. Providing additional information is optional but doing so
+        will aid significantly in our
+        research.
+      </p>
+      <p>Explanatory notes are given at the top of each section and further informtion can be viewed (or hidden) by
+        clicking the <img src="images/infoIcon.png">
+        icon wherever it is displayed.
+      </p>
+      <p>At the end of the form, before any data is transferred you will also be required to indicate your consent to
+        particate in the project. Once
+        your data is uploaded you will be given a unique reference code which you should make a note of, as all
+        information is collected anonymously,
+        you will need this code if you change your mind in the future and wish to withdraw your data from the
+        research.
+      </p>
+    </div>
+
+    <!--Intro: Demographic-->
+    <div id="4" class="panel" style="display: none">
+      <h4>Section 1: Demographic Info</h4>
+      <p>Demographic information tells us a little about your general characteristics and is used to help classify
+        the hand photos that you submit. All of the information in this
+        section is optional but providing it will help us to tune our models more accurately.
+      </p>
+    </div>
+
+    <!--Gender-->
+    <div id="5" class="panel" style="display: none">
+      <label class="control-label" for="gender">Gender <img class="info" src="images/infoIcon.png"
+          onclick="toggleInfoPanel('infoPanelGender')" />
+
+        <div id="infoPanelGender" class="infoPanel" style="display: inline">
+          <p>We collect gender information to help researchers train AI models to identify if there are physical
+            differences in hand markings between men and women.
+          </p>
+        </div>
+      </label>
+
+      <div class="widget">
+        <input id="gender_1" name="gender" type="radio" value="1" class="button">
+        <label for="gender_1">Male</label>
+        <br />
+        <input id="gender_2" name="gender" type="radio" value="2">
+        <label for="gender_2">
+          Female
+        </label>
+        <br />
+
+
+        <input id="gender_3" name="gender" type="radio" value="3">
+        <label for="gender_3">
+          Transgender Male
+        </label>
+        <br />
+
+
+        <input id="gender_4" name="gender" type="radio" value="4">
+        <label for="gender_4">
+          Transgender Female
+        </label>
+        <br />
+
+
+        <input id="gender_5" name="gender" type="radio" value="5">
+        <label for="gender_5">
+          Prefer not to say
+        </label>
+      </div>
+    </div>
+
+
+    <!--Consent to participate-->
+    <div id="2" class="panel" style="display: none">
+      <h4>Consent to Participate</h4>
+
+      <div id="infoPanelConsenttoParticipate" class="infoPanel" style="display: inline">
+        <p>We require you to give consent in order for us to use your information. Please read the statements below
+          and check the relevant box to indicate your agreement.
+          If you do not agree with all six statements we cannot accept your contribution to the research.</p>
+      </div>
+
+      <div class="checkbox">
+        <input id="Consent_1" name="Consent[]" type="checkbox" value="1" data-rule-minlength="6"
+          data-msg-minlength="All items must be checked to indicate consent" data-rule-required="true">
+        <label for="Consent_1">
+          I confirm that I am an adult and am 18 years of age or older
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="Consent_2" name="Consent[]" type="checkbox" value="2">
+        <label for="Consent_2">
+          I consent to being a participant in this research
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="Consent_3" name="Consent[]" type="checkbox" value="3">
+        <label for="Consent_3">
+          I confirm I have read and understand the nature of the research that is being proposed
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="Consent_4" name="Consent[]" type="checkbox" value="4">
+        <label for="Consent_4">
+          I understand that upon submission of my data I will be presented with a unique submission reference code
+          which will be the only way to identify my data.
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="Consent_5" name="Consent[]" type="checkbox" value="5">
+        <label for="Consent_5">
+          I understand that my participation is voluntary and that I am free to withdraw my images and additional
+          information supplied from the project at any time by quoting my unique submission reference code.
+
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="Consent_6" name="Consent[]" type="checkbox" value="6">
+        <label for="Consent_6">
+          I confirm that I understand that my images and data will be destroyed by the research team within 10 years
+          if the commencement of the research in 2019
+        </label>
+      </div>
+    </div>
+
+    <!--Image Usage consent-->
+    <div class="panel" id="3" style="display: none">
+      <h4>Image Usage</h4><img class="info" src="images/infoIcon.png"
+        onclick="toggleInfoPanel('infoPanelImageUsage')" />
+
+      <div id="infoPanelImageUsage" class="infoPanel" style="display: inline">
+        During the course of our research, we will seek to publish papers in academic journals and will also issue
+        press releases to media organisations. If you are happy for images of your hands to be used to illustrate
+        articles, please indicate your consent by checking
+        the box below. This is optional and does not affect your ability to contribute to our research.
+      </div>
+
+      <div class="checkbox">
+        <input id="imageUsageConsent_1" name="imageUsageConsent[]" type="checkbox" value="1">
+        <label for="imageUsageConsent_1">
+          I consent to my images being used for the purposes of illustration in a teaching and research environment
+          which may include publication in scientific journals
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="imageUsageConsent_2" name="imageUsageConsent[]" type="checkbox" value="2">
+        <label for="imageUsageConsent_2">
+          I consent to my images being used for the purposes of 'citizen science' and public engagement activities
+          as part of the H-Unique project.
+        </label>
+      </div>
+
+
+    </div>
+
+    <!--Age-->
+    <div id="6" class="panel" style="display: none">
+      <h4>Your Age</h4>
+      <div id="infoPanelAge" class="infoPanel" style="display: inline">
+        <p>Knowing your age at the time these photos were taken will help us to identify whether hands have
+          distinguishing characteristics associated with aging.
+        </p>
+      </div>
+
+      <div class="widget">
+        <label for="txtAge">Please use the keypad to enter your age</label>
+
+        <div id="txtAge" class="displayBox">age...</div>
+
+        <div class="keypad">
+          <div>
+            <button class="ui-button ui-widget ui-corner-all keypad" onclick="keypad(1)" id="btnkey1">1</button>
+            <button class="ui-button ui-widget ui-corner-all keypad" onclick="keypad(2)" id="btnkey1">2</button>
+            <button class="ui-button ui-widget ui-corner-all keypad" onclick="keypad(3)" id="btnkey1">3</button>
+          </div>
+          <div>
+            <button class="ui-button ui-widget ui-corner-all keypad" onclick="keypad(4)" id="btnkey1">4</button>
+            <button class="ui-button ui-widget ui-corner-all keypad" onclick="keypad(5)" id="btnkey1">5</button>
+            <button class="ui-button ui-widget ui-corner-all keypad" onclick="keypad(6)" id="btnkey1">6</button>
+          </div>
+          <div>
+            <button class="ui-button ui-widget ui-corner-all keypad" onclick="keypad(7)" id="btnkey1">7</button>
+            <button class="ui-button ui-widget ui-corner-all keypad" onclick="keypad(8)" id="btnkey1">8</button>
+            <button class="ui-button ui-widget ui-corner-all keypad" onclick="keypad(9)" id="btnkey1">9</button>
+          </div>
+          <div>
+            <button class="ui-button ui-widget ui-corner-all keypad" onclick="keypad(-2)" id="btnkey1">C</button>
+            <button class="ui-button ui-widget ui-corner-all keypad" onclick="keypad(2)" id="btnkey1">0</button>
+            <button class="ui-button ui-widget ui-corner-all keypad" onclick="keypad(-1)" id="btnkey1">&lt;</button>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <!--Hair Colour-->
+    <div id="7" class="panel">
+      <h4>Natural/Original Hair Colour</h4>
+
+      <div id="infoPanelHairColour" class="infoPanel" style="display: inline">
+        <p>Need descriptive text here...
+        </p>
+      </div>
+
+      <div class="widget">
+        <input id="hairColour_1" name="hairColour" type="radio" value="1">
+        <label for="hairColour_1">
+          Blonde
+        </label>
+      </div>
+
+      <div class="widget">
+        <input id="hairColour_2" name="hairColour" type="radio" value="2">
+        <label for="hairColour_2">
+          Black
+        </label>
+      </div>
+
+      <div class="widget">
+        <input id="hairColour_3" name="hairColour" type="radio" value="3">
+        <label for="hairColour_3">
+          Brown
+        </label>
+      </div>
+
+      <div class="widget">
+        <input id="hairColour_4" name="hairColour" type="radio" value="4">
+        <label for="hairColour_4">
+          Red
+        </label>
+      </div>
+
+      <div class="widget">
+        <input id="hairColour_5" name="hairColour" type="radio" value="5">
+        <label for="hairColour_5">
+          Other
+        </label>
+      </div>
+
+      <div class="widget">
+        <input id="hairColour_6" name="hairColour" type="radio" value="6">
+        <label for="hairColour_6">
+          Prefer not to say
+        </label>
+      </div>
+
+
+    </div>
+
+    <!--Ethnic Group-->
+    <div id="8" class="panel">
+      <h4>Ethnic Group</h4>
+
+
+      <div class="ui-widget">
+        <h5>White</h5>
+        <input id="Ethnicity_2" name="Ethnicity" type="radio" value="2">
+        <label for="Ethnicity_2">English/Welsh/Scottish/Northern Irish/British</label>
+        <input id="Ethnicity_3" type="radio" value="3" name="Ethnicity">
+        <label for="Ethnicity_3">Irish</label>
+        <input id="Ethnicity_4" type="radio" value="4" name="Ethnicity">
+        <label for="Ethnicity_4">Gypsy or Irish Traveller</label>
+        <input id="Ethnicity_5" type="radio" value="5" name="Ethnicity">
+        <label for="Ethnicity_5">Any other white background</label>
+        <h5>Mixed/Multiple Ethnic Groups</h5>
+        <input id="Ethnicity_7" name="Ethnicity" type="radio" value="7">
+        <label for="Ethnicity_7">White and Black Carribean</label>
+        <input id="Ethnicity_8" name="Ethnicity" type="radio" value="8">
+        <label for="Ethnicity_8">White and Black African</label>
+        <input id="Ethnicity_9" name="Ethnicity" type="radio" value="9">
+        <label for="Ethnicity_9">White and Asian</label>
+        <input id="Ethnicity_10" name="Ethnicity" type="radio" value="10_">
+        <label for="Ethnicity_10">Other mixed/multiple ethnic group</label>
+        <h5>Asian/Asian British</h5>
+        <input id="Ethnicity_12" name="Ethnicity" type="radio" value="12">
+        <label for="Ethnicity_12">Indian</label>
+        <input id="Ethnicity_13" name="Ethnicity" type="radio" value="13">
+        <label for="Ethnicity_13">Pakistani</label>
+        <input id="Ethnicity_14" name="Ethnicity" type="radio" value="14">
+        <label for="Ethnicity_14">Bangladeshi</label>
+        <input id="Ethnicity_15" name="Ethnicity" type="radio" value="15">
+        <label for="Ethnicity_15">Chinese</label>
+        <input id="Ethnicity_16" name="Ethnicity" type="radio" value="16">
+        <label for="Ethnicity_16">Other Asian background</label>
+        <h5>Black/African/Carribean/Black British</h5>
+        <input id="Ethnicity_18" name="Ethnicity" type="radio" value="18">
+        <label for="Ethnicity_18">African</label>
+        <input id="Ethnicity_19" name="Ethnicity" type="radio" value="19">
+        <label for="Ethnicity_19">Carribean</label>
+        <input id="Ethnicity_20" name="Ethnicity" type="radio" value="20">
+        <label for="Ethnicity_20">Other Black/African/Carribean background</label>
+        <h5>Other Ethnic Group</h5>
+        <input id="Ethnicity_22" name="Ethnicity" type="radio" value="22">
+        <label for="Ethnicity_22">Arab</label>
+        <input id="Ethnicity_23" name="Ethnicity" type="radio" value="23">
+        <label for="Ethnicity_23">Any other ethnic group</label>
+        <input id="Ethnicity_24" name="Ethnicity" type="radio" value="24">
+        <label for="Ethnicity_24">Prefer not to say</label>
+      </div>
+
+
+    </div>
+
+    <!--Intro: Info About Hands-->
+    <div id="9" class="panel" style="display: none">
+      <h4>Section 2: Information About Your Hands</h4>
+      <p>This section relates to medical conditions and other factors that may affect hand appearance but are not
+        specific to one hand or the other. All of the information in this section is optional but providing it will help
+        us to tune our models more accurately.
+      </p>
+    </div>
+
+    <!--Handedness-->
+    <div id="10" class="panel">
+      <h4>Handedness</h4>
+
+      <div id="infoPanelchirality" class="infoPanel" style="display: inline">
+        <p>Need descriptive text here...
+        </p>
+      </div>
+
+      <div class="widget">
+        <input id="chirality_1" name="chirality" type="radio" value="1">
+        <label for="chirality_1">
+          Dominant Right
+        </label>
+      </div>
+
+      <div class="widget">
+        <input id="chirality_2" name="chirality" type="radio" value="2">
+        <label for="chirality_2">
+          Dominant Left
+        </label>
+      </div>
+
+      <div class="widget">
+        <input id="chirality_3" name="chirality" type="radio" value="3">
+        <label for="chirality_3">
+          Genuine Ambidextrous
+        </label>
+      </div>
+
+      <div class="widget">
+        <input id="chirality_4" name="chirality" type="radio" value="4">
+        <label for="chirality_4">
+          Cross Dominant/Mixed
+        </label>
+      </div>
+
+      <div class="widget">
+        <input id="chirality_5" name="chirality" type="radio" value="5">
+        <label for="chirality_5">
+          Prefer not to say
+        </label>
+      </div>
+    </div>
+
+    <div id="11" class="panel">
+      <h4>Skin Conditions</h4>
+      <div id="infoPanelSkinCondition" class="infoPanel" style="display: inline">
+        <p>If you regularly suffer from any skin conditons which may affect your hands, please indicate below.
+        </p>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_1" name="skinConditions[]" type="checkbox" value="1">
+        <label for="skinConditions_1">
+          Acanthosis Nigricans
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_2" name="skinConditions[]" type="checkbox" value="2">
+        <label for="skinConditions_2">
+          Acne
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_3" name="skinConditions[]" type="checkbox" value="3">
+        <label for="skinConditions_3">
+          Actinic Keratosis
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_4" name="skinConditions[]" type="checkbox" value="4">
+        <label for="skinConditions_4">
+          Basal cell carcinoma
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_5" name="skinConditions[]" type="checkbox" value="5">
+        <label for="skinConditions_5">
+          Blisters
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_6" name="skinConditions[]" type="checkbox" value="6">
+        <label for="skinConditions_6">
+          Carbuncle
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_7" name="skinConditions[]" type="checkbox" value="7">
+        <label for="skinConditions_7">
+          Cellulitis
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_8" name="skinConditions[]" type="checkbox" value="8">
+        <label for="skinConditions_8">
+          Contact dermatitis
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_9" name="skinConditions[]" type="checkbox" value="9">
+        <label for="skinConditions_9">
+          Eczema
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_10" name="skinConditions[]" type="checkbox" value="10">
+        <label for="skinConditions_10">
+          Hives
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_11" name="skinConditions[]" type="checkbox" value="11">
+        <label for="skinConditions_11">
+          Impetigo
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_12" name="skinConditions[]" type="checkbox" value="12">
+        <label for="skinConditions_12">
+          Keratosis pilaris
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_13" name="skinConditions[]" type="checkbox" value="13">
+        <label for="skinConditions_13">
+          Latex allergy
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_14" name="skinConditions[]" type="checkbox" value="14">
+        <label for="skinConditions_14">
+          Lupus
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_15" name="skinConditions[]" type="checkbox" value="15">
+        <label for="skinConditions_15">
+          Melanoma
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_16" name="skinConditions[]" type="checkbox" value="16">
+        <label for="skinConditions_16">
+          Melasma
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_17" name="skinConditions[]" type="checkbox" value="17">
+        <label for="skinConditions_17">
+          Psoriasis
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_18" name="skinConditions[]" type="checkbox" value="18">
+        <label for="skinConditions_18">
+          Ringworm
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_19" name="skinConditions[]" type="checkbox" value="19">
+        <label for="skinConditions_19">
+          Rosacea
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_20" name="skinConditions[]" type="checkbox" value="20">
+        <label for="skinConditions_20">
+          Seborrheic eczema
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_21" name="skinConditions[]" type="checkbox" value="21">
+        <label for="skinConditions_21">
+          Squamous cell carcinoma
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_22" name="skinConditions[]" type="checkbox" value="22">
+        <label for="skinConditions_22">
+          Tinea versicolor
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_23" name="skinConditions[]" type="checkbox" value="23">
+        <label for="skinConditions_23">
+          Vitiligo
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_24" name="skinConditions[]" type="checkbox" value="24">
+        <label for="skinConditions_24">
+          Warts
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="skinConditions_25" name="skinConditions[]" type="checkbox" value="25"
+          onClick="togglePanel(this.id, 'otherSkinCondition')">
+        <label for="skinConditions_25">
+          Other (please specify)
+        </label>
+      </div>
+
+      <div class="checkboxradio" id="otherSkinCondition" style="display: none">
+        <label class="control-label sr-only" for="txtskinConditionOther">Other skin condition</label>
+        <textarea class="" id="txtSkinConditionOther" name="txtSkinConditionOther" rows="3"
+          placeholder="Please list other skin conditions from which you regularly suffer..."></textarea>
+      </div>
+    </div>
+
+    <div id="12" class="panel">
+      <h4>Clinical Conditions</h4>
+      <div id="infoPanelClinicalCondition" class="infoPanel" style="display: inline">
+        <p>If you suffer from any clinical conditions that might affect the appearance of your hands, please indicate
+          below.
+        </p>
+      </div>
+
+      <div class="checkbox">
+        <input id="clinicalConditions_1" name="clinicalConditions[]" type="checkbox" value="1">
+        <label for="clinicalConditions_1">
+          Abscess
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="clinicalConditions_2" name="clinicalConditions[]" type="checkbox" value="2">
+        <label for="clinicalConditions_2">
+          Boutonnière/Buttonhole Deformity
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="clinicalConditions_3" name="clinicalConditions[]" type="checkbox" value="3">
+        <label for="clinicalConditions_3">
+          Carpal Tunnel Syndrome
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="clinicalConditions_4" name="clinicalConditions[]" type="checkbox" value="4">
+        <label for="clinicalConditions_4">
+          Cubital Tunnel Syndrome
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="clinicalConditions_5" name="clinicalConditions[]" type="checkbox" value="5">
+        <label for="clinicalConditions_5">
+          De Quervain Syndrome/ Washerwoman's Sprain
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="clinicalConditions_6" name="clinicalConditions[]" type="checkbox" value="6">
+        <label for="clinicalConditions_6">
+          Dupuytren's Contracture/Palmar Fibromatosis
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="clinicalConditions_7" name="clinicalConditions[]" type="checkbox" value="7">
+        <label for="clinicalConditions_7">
+          Felon
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="clinicalConditions_8" name="clinicalConditions[]" type="checkbox" value="8">
+        <label for="clinicalConditions_8">
+          Ganglia/Ganglion Cysts
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="clinicalConditions_9" name="clinicalConditions[]" type="checkbox" value="9">
+        <label for="clinicalConditions_9">
+          Herpetic Whitlow
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="clinicalConditions_10" name="clinicalConditions[]" type="checkbox" value="10">
+        <label for="clinicalConditions_10">
+          Infectious Flexor Tenosynovitis/Tendon Sheath Infection
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="clinicalConditions_11" name="clinicalConditions[]" type="checkbox" value="11">
+        <label for="clinicalConditions_11">
+          Kienböck Disease
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="clinicalConditions_12" name="clinicalConditions[]" type="checkbox" value="12">
+        <label for="clinicalConditions_12">
+          Osteoarthritis
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="clinicalConditions_13" name="clinicalConditions[]" type="checkbox" value="13">
+        <label for="clinicalConditions_13">
+          Radial Tunnel Syndrome
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="clinicalConditions_14" name="clinicalConditions[]" type="checkbox" value="14">
+        <label for="clinicalConditions_14">
+          Swan-Neck Deformity
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="clinicalConditions_15" name="clinicalConditions[]" type="checkbox" value="Trigger Finger">
+        <label for="clinicalConditions_15">
+          Trigger Finger
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <input id="clinicalConditions_16" name="clinicalConditions[]" type="checkbox" value="16"
+          onClick="togglePanel(this.id, 'otherClinicalCondition')">
+        <label for="clinicalConditions_16">Other (please specify)</label>
+      </div>
+
+      <div class="checkboxradio" id="otherClinicalCondition" style="display: none">
+        <label class="control-label sr-only" for="txtClinicalConditionOther">Other skin condition</label>
+        <textarea class="" id="txtClinicalConditionOther" name="txtClinicalConditionOther" rows="3"
+          placeholder="Please list other clinical conditions from which you suffer..."></textarea>
+      </div>
+    </div>
+
+    <div id="13" class="panel">
+      <h4>Section 3: Your Left Hand</h4>
+      <p>In this section we are interested in how your left hand looks and the factors influencing that. To perform our
+        research we need a minimum of three images of each hand in specific positions. Other images are optional. We
+        also ask a series of questions about injuries and scarring on the left hand - answering these is optional but
+        doing so will aid in the development of feature recognition algorithms. </p>
+      <p>If you do not have your left hand, please uncheck the box below to skip this section</p>
+
+      <div class="checkbox">
+        <input id="cbxNoLeftHand" name="cbxNoLeftHand[]" type="checkbox" checked="true" value="noLeftHand"
+          onchange="toggleHandPanel(this.id, 'panelLHFields')">
+        <label for="cbxNoLeftHand">
+          Contribute left hand images
+        </label>
+      </div>
+    </div>
+
+    <div id="14" class="panel">
+      <h4>Left Hand: Rear View</h4>
+
+      <div id="ImageLHD" class="imagePanel" style="background-image: url('images/lhd.jpg')">
+
+      </div>
+      <p>Please take a picture of the rear of your left hand, similar to the example image above. Once your image is
+        taken it will replace the example image.</p>
+
+      <div style="text-align: center">
+        <button class="ui-button ui-widget ui-corner-all" onclick="startPhoto('ImageLHD')"><img src="images/camIcon.png"
+            style="padding-right: 5px" alt="camera icon">Take Picture</button>
+      </div>
+      <input type="file" accept="image" capture="camera">
+    </div>
+
+    
+
+
+    <!--End of content sections-->
+    <div class="ui-footer">
+      <button class="ui-button ui-widget ui-corner-all" onclick="nextClick(-1)" id="btnPrevious"
+        style="display: none">Back</button>
+      <button class="ui-button ui-widget ui-corner-all" onclick="nextClick(1)" id="btnNext">Next</button>
+    </div>
+  </div>
+
+
+
+</body>
+
+</html>
