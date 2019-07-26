@@ -121,3 +121,9 @@ function endPhoto()
 {
     //Photo has been taken, process and close viewFinder
 }
+
+function previewImage(Reference, source)
+{
+    document.getElementById(Reference).style.backgroundImage = "url(" + source +")";
+}
+

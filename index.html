@@ -21,7 +21,7 @@
   <script src="jq/jquery-ui.js"></script>
 
   <script src="js/hunique.js"></script>
-  
+
   <link rel="stylesheet" href="jq/jquery-ui.theme.css">
   <link rel="stylesheet" href="css/hunique.css">
   <link rel="stylesheet" href="css/camera.css">
@@ -44,24 +44,24 @@
   <div id="viewFinder" class="viewFinder" style="display: none">
     <!-- Camera -->
     <main id="camera">
-        <!--Camera Sensor-->
-        <canvas id="camera--sensor"></canvas>
+      <!--Camera Sensor-->
+      <canvas id="camera--sensor"></canvas>
 
-        <!-- Camera view -->
-        <video id="camera--view" autoplay playsinline></video>
+      <!-- Camera view -->
+      <video id="camera--view" autoplay playsinline></video>
 
-        <!-- Camera output -->
-        <img src="//:0" alt="" id="camera--output">
+      <!-- Camera output -->
+      <img src="//:0" alt="" id="camera--output">
 
-        
+
     </main>
 
     <div id="overlay" class="overlay">
       <!-- Camera trigger -->
       <button id="camera--trigger" style="z-index: 101">Take a picture</button>
     </div>
-  
-    
+
+
   </div>
   <script src="js/camera.js"></script>
 
@@ -794,15 +794,21 @@
       <p>Please take a picture of the rear of your left hand, similar to the example image above. Once your image is
         taken it will replace the example image.</p>
 
-      <div style="text-align: center">
+      <div style="text-align: center" id="camControlWebcam">
         <button class="ui-button ui-widget ui-corner-all" onclick="startPhoto('ImageLHD')"><img src="images/camIcon.png"
             style="padding-right: 5px" alt="camera icon">Take Picture</button>
       </div>
-      <p>xx</p>
-      <input type="file" name="inpLHD" id="inpLHD" accept="image/*" capture="camera">
+
+      <div style="text-align: center" id="camControlFile">
+        <label class="camButtonContainer" style="text-align: center">
+          <button class="ui-button ui-widget ui-corner-all"><img src="images/camIcon.png" style="padding-right: 5px"
+              alt="camera icon">Take Picture</button>
+          <input type="file" name="inpLHD" id="inpLHD" accept="image/*" capture="camera" onchange="previewImage('ImageLHD', window.URL.createObjectURL(this.files[0]))">
+        </label>
+      </div>
     </div>
 
-    
+
 
 
     <!--End of content sections-->
