@@ -21,6 +21,7 @@
   <script src="jq/jquery-ui.js"></script>
 
   <script src="js/hunique.js"></script>
+  <script src="js/panelManifest.js"></script>
 
   <link rel="stylesheet" href="jq/jquery-ui.theme.css">
   <link rel="stylesheet" href="css/hunique.css">
@@ -40,7 +41,8 @@
 
 <body>
 
-  <!--Camera control panel: displayed for each hand image capture-->
+  <!--Camera control panel: displayed for each hand image capture
+  --currently not in use-->
   <div id="viewFinder" class="viewFinder" style="display: none">
     <!-- Camera -->
     <main id="camera">
@@ -60,10 +62,21 @@
       <!-- Camera trigger -->
       <button id="camera--trigger" style="z-index: 101">Take a picture</button>
     </div>
-
-
   </div>
   <script src="js/camera.js"></script>
+
+  <div id="helpPage" class="container" style="display: none">
+    <div class="panel" style="display: inline">
+      <h4 id="helpTitle">
+        Title
+      </h4>
+      <div id="helpContent">Content goes in here</div>
+    </div>
+    <div class="ui-footer">
+      <button id="helpClose" class="ui-button ui-widget ui-corner-all" onclick="hideHelp();">Close</button>
+    </div>
+  </div>
+
 
   <div id="splash" class="splash" style="display: inline-block" onclick="doBegin()">
     <div>
@@ -74,8 +87,10 @@
       <h4>H-Unique</h4>
       <p>Tap to begin</p>
     </div>
-
   </div>
+
+
+
 
   <!--Start of Data capture-->
   <div class="container" id="form" style="display: none">
@@ -117,14 +132,13 @@
 
     <!--Gender-->
     <div id="5" class="panel" style="display: none">
-      <label class="control-label" for="gender">Gender <img class="info" src="images/infoIcon.png"
-          onclick="toggleInfoPanel('infoPanelGender')" />
+      <h4>Gender</h4>
 
-        <div id="infoPanelGender" class="infoPanel" style="display: inline">
-          <p>We collect gender information to help researchers train AI models to identify if there are physical
-            differences in hand markings between men and women.
-          </p>
-        </div>
+      <div id="infoPanelGender" class="infoPanel" style="display: inline">
+        <p>We collect gender information to help researchers train AI models to identify if there are physical
+          differences in hand markings between men and women.
+        </p>
+      </div>
       </label>
 
       <div class="widget">
@@ -161,7 +175,7 @@
 
 
     <!--Consent to participate-->
-    <div id="2" class="panel" style="display: none">
+    <div id="2" class="panel hideNext" style="display: none">
       <h4>Consent to Participate</h4>
 
       <div id="infoPanelConsenttoParticipate" class="infoPanel" style="display: inline">
@@ -171,29 +185,33 @@
       </div>
 
       <div class="checkbox">
-        <input id="Consent_1" name="Consent[]" type="checkbox" value="1" data-rule-minlength="6"
-          data-msg-minlength="All items must be checked to indicate consent" data-rule-required="true">
+        <input id="Consent_1" name="cbxConsent" type="checkbox" value="1" class="cbxConsent" onclick="validateConsent()"
+          data-rule-minlength="6" data-msg-minlength="All items must be checked to indicate consent"
+          data-rule-required="true">
         <label for="Consent_1">
           I confirm that I am an adult and am 18 years of age or older
         </label>
       </div>
 
       <div class="checkbox">
-        <input id="Consent_2" name="Consent[]" type="checkbox" value="2">
+        <input id="Consent_2" name="cbxConsent" type="checkbox" value="2" class="cbxConsent"
+          onclick="validateConsent()">
         <label for="Consent_2">
           I consent to being a participant in this research
         </label>
       </div>
 
       <div class="checkbox">
-        <input id="Consent_3" name="Consent[]" type="checkbox" value="3">
+        <input id="Consent_3" name="cbxConsent" type="checkbox" value="3" class="cbxConsent"
+          onclick="validateConsent()">
         <label for="Consent_3">
           I confirm I have read and understand the nature of the research that is being proposed
         </label>
       </div>
 
       <div class="checkbox">
-        <input id="Consent_4" name="Consent[]" type="checkbox" value="4">
+        <input id="Consent_4" name="cbxConsent" type="checkbox" value="4" class="cbxConsent"
+          onclick="validateConsent()">
         <label for="Consent_4">
           I understand that upon submission of my data I will be presented with a unique submission reference code
           which will be the only way to identify my data.
@@ -201,7 +219,8 @@
       </div>
 
       <div class="checkbox">
-        <input id="Consent_5" name="Consent[]" type="checkbox" value="5">
+        <input id="Consent_5" name="cbxConsent" type="checkbox" value="5" class="cbxConsent"
+          onclick="validateConsent()">
         <label for="Consent_5">
           I understand that my participation is voluntary and that I am free to withdraw my images and additional
           information supplied from the project at any time by quoting my unique submission reference code.
@@ -210,7 +229,8 @@
       </div>
 
       <div class="checkbox">
-        <input id="Consent_6" name="Consent[]" type="checkbox" value="6">
+        <input id="Consent_6" name="cbxConsent" type="checkbox" value="6" class="cbxConsent"
+          onclick="validateConsent()">
         <label for="Consent_6">
           I confirm that I understand that my images and data will be destroyed by the research team within 10 years
           if the commencement of the research in 2019
@@ -220,8 +240,7 @@
 
     <!--Image Usage consent-->
     <div class="panel" id="3" style="display: none">
-      <h4>Image Usage</h4><img class="info" src="images/infoIcon.png"
-        onclick="toggleInfoPanel('infoPanelImageUsage')" />
+      <h4>Image Usage</h4>
 
       <div id="infoPanelImageUsage" class="infoPanel" style="display: inline">
         During the course of our research, we will seek to publish papers in academic journals and will also issue
@@ -348,50 +367,67 @@
     <div id="8" class="panel">
       <h4>Ethnic Group</h4>
 
-
+      <div id="infoPanelEthnicGroup" class="infoPanel" style="display: inline">
+        <p>Please select which ethnic group you belong to from the list below...
+        </p>
+      </div>
       <div class="ui-widget">
-        <h5>White</h5>
-        <input id="Ethnicity_2" name="Ethnicity" type="radio" value="2">
-        <label for="Ethnicity_2">English/Welsh/Scottish/Northern Irish/British</label>
-        <input id="Ethnicity_3" type="radio" value="3" name="Ethnicity">
-        <label for="Ethnicity_3">Irish</label>
-        <input id="Ethnicity_4" type="radio" value="4" name="Ethnicity">
-        <label for="Ethnicity_4">Gypsy or Irish Traveller</label>
-        <input id="Ethnicity_5" type="radio" value="5" name="Ethnicity">
-        <label for="Ethnicity_5">Any other white background</label>
-        <h5>Mixed/Multiple Ethnic Groups</h5>
-        <input id="Ethnicity_7" name="Ethnicity" type="radio" value="7">
-        <label for="Ethnicity_7">White and Black Carribean</label>
-        <input id="Ethnicity_8" name="Ethnicity" type="radio" value="8">
-        <label for="Ethnicity_8">White and Black African</label>
-        <input id="Ethnicity_9" name="Ethnicity" type="radio" value="9">
-        <label for="Ethnicity_9">White and Asian</label>
-        <input id="Ethnicity_10" name="Ethnicity" type="radio" value="10_">
-        <label for="Ethnicity_10">Other mixed/multiple ethnic group</label>
-        <h5>Asian/Asian British</h5>
-        <input id="Ethnicity_12" name="Ethnicity" type="radio" value="12">
-        <label for="Ethnicity_12">Indian</label>
-        <input id="Ethnicity_13" name="Ethnicity" type="radio" value="13">
-        <label for="Ethnicity_13">Pakistani</label>
-        <input id="Ethnicity_14" name="Ethnicity" type="radio" value="14">
-        <label for="Ethnicity_14">Bangladeshi</label>
-        <input id="Ethnicity_15" name="Ethnicity" type="radio" value="15">
-        <label for="Ethnicity_15">Chinese</label>
-        <input id="Ethnicity_16" name="Ethnicity" type="radio" value="16">
-        <label for="Ethnicity_16">Other Asian background</label>
-        <h5>Black/African/Carribean/Black British</h5>
-        <input id="Ethnicity_18" name="Ethnicity" type="radio" value="18">
-        <label for="Ethnicity_18">African</label>
-        <input id="Ethnicity_19" name="Ethnicity" type="radio" value="19">
-        <label for="Ethnicity_19">Carribean</label>
-        <input id="Ethnicity_20" name="Ethnicity" type="radio" value="20">
-        <label for="Ethnicity_20">Other Black/African/Carribean background</label>
-        <h5>Other Ethnic Group</h5>
-        <input id="Ethnicity_22" name="Ethnicity" type="radio" value="22">
-        <label for="Ethnicity_22">Arab</label>
-        <input id="Ethnicity_23" name="Ethnicity" type="radio" value="23">
-        <label for="Ethnicity_23">Any other ethnic group</label>
-        <input id="Ethnicity_24" name="Ethnicity" type="radio" value="24">
+        <p onclick="toggleEth('ethWhite')"><img id="icon_ethWhite" class="ddlIcon" src="images/expand16.png">White</p>
+        <div id="ethWhite" style="display: none">
+          <input id="Ethnicity_2" name="Ethnicity" type="radio" value="2">
+          <label for="Ethnicity_2">English/Welsh/Scottish/Northern Irish/British</label>
+          <input id="Ethnicity_3" type="radio" value="3" name="Ethnicity">
+          <label for="Ethnicity_3">Irish</label>
+          <input id="Ethnicity_4" type="radio" value="4" name="Ethnicity">
+          <label for="Ethnicity_4">Gypsy or Irish Traveller</label>
+          <input id="Ethnicity_5" type="radio" value="5" name="Ethnicity">
+          <label for="Ethnicity_5">Any other white background</label>
+        </div>
+        <p onclick="toggleEth('ethBlack')"><img id="icon_ethBlack" class="ddlIcon"
+            src="images/expand16.png">Black/African/Carribean/Black British</p>
+        <div id="ethBlack" style="display: none">
+          <input id="Ethnicity_18" name="Ethnicity" type="radio" value="18">
+          <label for="Ethnicity_18">African</label>
+          <input id="Ethnicity_19" name="Ethnicity" type="radio" value="19">
+          <label for="Ethnicity_19">Carribean</label>
+          <input id="Ethnicity_20" name="Ethnicity" type="radio" value="20">
+          <label for="Ethnicity_20">Other Black/African/Carribean background</label>
+        </div>
+        <p onclick="toggleEth('ethAsian')"><img id="icon_ethAsian" class="ddlIcon" src="images/expand16.png">Asian/Asian
+          British</p>
+        <div id="ethAsian" style="display: none">
+          <input id="Ethnicity_12" name="Ethnicity" type="radio" value="12">
+          <label for="Ethnicity_12">Indian</label>
+          <input id="Ethnicity_13" name="Ethnicity" type="radio" value="13">
+          <label for="Ethnicity_13">Pakistani</label>
+          <input id="Ethnicity_14" name="Ethnicity" type="radio" value="14">
+          <label for="Ethnicity_14">Bangladeshi</label>
+          <input id="Ethnicity_15" name="Ethnicity" type="radio" value="15">
+          <label for="Ethnicity_15">Chinese</label>
+          <input id="Ethnicity_16" name="Ethnicity" type="radio" value="16">
+          <label for="Ethnicity_16">Other Asian background</label>
+        </div>
+        <p onclick="toggleEth('ethMixed')"><img id="icon_ethMixed" class="ddlIcon"
+            src="images/expand16.png">Mixed/Multiple Ethnic Groups</p>
+        <div id="ethMixed" style="display: none">
+          <input id="Ethnicity_7" name="Ethnicity" type="radio" value="7">
+          <label for="Ethnicity_7">White and Black Carribean</label>
+          <input id="Ethnicity_8" name="Ethnicity" type="radio" value="8">
+          <label for="Ethnicity_8">White and Black African</label>
+          <input id="Ethnicity_9" name="Ethnicity" type="radio" value="9">
+          <label for="Ethnicity_9">White and Asian</label>
+          <input id="Ethnicity_10" name="Ethnicity" type="radio" value="10_">
+          <label for="Ethnicity_10">Other mixed/multiple ethnic group</label>
+        </div>
+        <p onclick="toggleEth('ethOther')"><img id="icon_ethOther" class="ddlIcon" src="images/expand16.png">Other
+          Ethnic Group</p>
+        <div id="ethOther" style="display: none">
+          <input id="Ethnicity_22" name="Ethnicity" type="radio" value="22">
+          <label for="Ethnicity_22">Arab</label>
+          <input id="Ethnicity_23" name="Ethnicity" type="radio" value="23">
+          <label for="Ethnicity_23">Any other ethnic group</label>
+          <input id="Ethnicity_24" name="Ethnicity" type="radio" value="24">
+        </div>
         <label for="Ethnicity_24">Prefer not to say</label>
       </div>
 
@@ -749,7 +785,7 @@
       </div>
 
       <div class="checkbox">
-        <input id="clinicalConditions_15" name="clinicalConditions[]" type="checkbox" value="Trigger Finger">
+        <input id="clinicalConditions_15" name="clinicalConditions[]" type="checkbox" value="15">
         <label for="clinicalConditions_15">
           Trigger Finger
         </label>
@@ -778,14 +814,14 @@
 
       <div class="checkbox">
         <input id="cbxNoLeftHand" name="cbxNoLeftHand[]" type="checkbox" checked="true" value="noLeftHand"
-          onchange="toggleHandPanel(this.id, 'panelLHFields')">
+          onchange="//toggleHandPanel(this.id, 'panelLHFields')">
         <label for="cbxNoLeftHand">
           Contribute left hand images
         </label>
       </div>
     </div>
 
-    <div id="14" class="panel">
+    <div id="14" class="panel hideNext">
       <h4>Left Hand: Rear View</h4>
 
       <div id="ImageLHD" class="imagePanel" style="background-image: url('images/lhd.jpg')">
@@ -803,22 +839,388 @@
         <label class="camButtonContainer" style="text-align: center">
           <button class="ui-button ui-widget ui-corner-all"><img src="images/camIcon.png" style="padding-right: 5px"
               alt="camera icon">Take Picture</button>
-          <input type="file" name="inpLHD" id="inpLHD" accept="image/*" capture="camera" onchange="previewImage('ImageLHD', window.URL.createObjectURL(this.files[0]))">
+          <input type="file" name="inpLHD" id="inpLHD" accept="image/*" capture="camera"
+            onchange="previewImage('ImageLHD', window.URL.createObjectURL(this.files[0]))">
+        </label>
+      </div>
+    </div>
+
+    <div id="15" class="panel hideNext">
+      <h4>Left Hand: Palm View</h4>
+
+      <div id="ImageLHP" class="imagePanel" style="background-image: url('images/lhp.jpg')">
+
+      </div>
+      <p>Please take a picture of the palm of your left hand, similar to the example image above. Once your image is
+        taken it will replace the example image.</p>
+      <!--
+      <div style="text-align: center" id="camControlWebcam">
+        <button class="ui-button ui-widget ui-corner-all" onclick="startPhoto('ImageLHP')"><img src="images/camIcon.png"
+            style="padding-right: 5px" alt="camera icon">Take Picture</button>
+      </div>
+      -->
+
+      <div style="text-align: center" id="camControlFile">
+        <label class="camButtonContainer" style="text-align: center">
+          <button class="ui-button ui-widget ui-corner-all"><img src="images/camIcon.png" style="padding-right: 5px"
+              alt="camera icon">Take Picture</button>
+          <input type="file" name="inpLHP" id="inpLHP" accept="image/*" capture="camera"
+            onchange="previewImage('ImageLHP', window.URL.createObjectURL(this.files[0]))">
+        </label>
+      </div>
+    </div>
+
+    <div id="16" class="panel hideNext">
+      <h4>Left Hand: Side View</h4>
+
+      <div id="ImageLHS" class="imagePanel" style="background-image: url('images/lhs.jpg')">
+
+      </div>
+      <p>Please take a picture of the side of your left hand, similar to the example image above. Once your image is
+        taken it will replace the example image.</p>
+      <!--
+      <div style="text-align: center" id="camControlWebcam">
+        <button class="ui-button ui-widget ui-corner-all" onclick="startPhoto('ImageLHS')"><img src="images/camIcon.png"
+            style="padding-right: 5px" alt="camera icon">Take Picture</button>
+      </div>
+      -->
+      <div style="text-align: center" id="camControlFile">
+        <label class="camButtonContainer" style="text-align: center">
+          <button class="ui-button ui-widget ui-corner-all"><img src="images/camIcon.png" style="padding-right: 5px"
+              alt="camera icon">Take Picture</button>
+          <input type="file" name="inpLHS" id="inpLHS" accept="image/*" capture="camera"
+            onchange="previewImage('ImageLHS', window.URL.createObjectURL(this.files[0]))">
+        </label>
+      </div>
+    </div>
+
+    <div id="17" class="panel">
+      <h4>Left Hand: Angled Rear View</h4>
+
+      <div id="ImageLHAD" class="imagePanel" style="background-image: url('images/lhad.jpg')">
+
+      </div>
+      <p>Please take a picture of the rear of your left hand, held at an approximately 45 degree angle, similar to the
+        example image above. Once your image is
+        taken it will replace the example image.</p>
+      <!--
+      <div style="text-align: center" id="camControlWebcam">
+        <button class="ui-button ui-widget ui-corner-all" onclick="startPhoto('ImageLHAD')"><img
+            src="images/camIcon.png" style="padding-right: 5px" alt="camera icon">Take Picture</button>
+      </div>
+    -->
+
+      <div style="text-align: center" id="camControlFile">
+        <label class="camButtonContainer" style="text-align: center">
+          <button class="ui-button ui-widget ui-corner-all"><img src="images/camIcon.png" style="padding-right: 5px"
+              alt="camera icon">Take Picture</button>
+          <input type="file" name="inpLHAD" id="inpLHAD" accept="image/*" capture="camera"
+            onchange="previewImage('ImageLHAD', window.URL.createObjectURL(this.files[0]))">
+        </label>
+      </div>
+    </div>
+
+    <div id="18" class="panel">
+      <h4>Left Hand: Angled Palm View</h4>
+
+      <div id="ImageLHAP" class="imagePanel" style="background-image: url('images/lhap.jpg')">
+
+      </div>
+      <p>Please take a picture of the palm of your left hand, held at an approximately 45 degree angle, similar to the
+        example image above. Once your image is taken it will replace the example image.</p>
+<!--
+      <div style="text-align: center" id="camControlWebcam">
+        <button class="ui-button ui-widget ui-corner-all" onclick="startPhoto('ImageLHAP')"><img
+            src="images/camIcon.png" style="padding-right: 5px" alt="camera icon">Take Picture</button>
+      </div>
+    -->
+
+      <div style="text-align: center" id="camControlFile">
+        <label class="camButtonContainer" style="text-align: center">
+          <button class="ui-button ui-widget ui-corner-all"><img src="images/camIcon.png" style="padding-right: 5px"
+              alt="camera icon">Take Picture</button>
+          <input type="file" name="inpLHAP" id="inpLHAP" accept="image/*" capture="camera"
+            onchange="previewImage('ImageLHAP', window.URL.createObjectURL(this.files[0]))">
+        </label>
+      </div>
+    </div>
+
+    <div id="19" class="panel">
+      <h4>Scarring and Injuries</h4>
+      <div id="infoPanelScarLeft" class="infoPanel" style="display: inline">
+          <p>Please indicate below if you have visible scarring or have suffered injuries that have visible impct on your left hand.
+          </p>
+        </div>
+
+        <div class="checkbox">
+            <input id="ScarLeftSurgical" name="cbxScarLeftSurgical" type="checkbox" value="1" class="cbxScar" onclick="toggleScarInjuryDetail('Left', 'Scar')">
+            <label for="ScarLeftSurgical">
+              Surgical (e.g. sclerotheraphy)
+            </label>
+          </div>
+    
+          <div class="checkbox">
+            <input id="ScarLeftAccidental" name="cbxScarLeftAccidental" type="checkbox" value="2" class="cbxScar"
+              onclick="toggleScarInjuryDetail('Left', 'Scar')">
+            <label for="ScarLeftAccidental">
+              Accidental (e.g. knife cut)
+            </label>
+          </div>
+
+          <div class="checkboxradio" id="LeftScarDetail" style="display: none">
+              <label class="control-label sr-only" for="txtleftScarDetail">Other skin condition</label>
+              <textarea class="textEntryPanel" id="txtLeftScarDetail" name="txtLeftScarDetail" rows="3"
+                placeholder="Please describe your left hand scars..."></textarea>
+            </div>
+    
+          <div class="checkbox">
+            <input id="InjuryLeft" name="cbxInjuryLeft" type="checkbox" value="3" class="cbxScar"
+            onclick="toggleScarInjuryDetail('Left', 'Injury')">
+            <label for="InjuryLeft">
+              Physical Injury
+            </label>
+          </div>
+
+          <div class="checkboxradio" id="LeftInjuryDetail" style="display: none">
+              <label class="control-label sr-only" for="txtleftInjuryDetail">Other skin condition</label>
+              <textarea class="textEntryPanel" id="txtleftInjuryDetail" name="txtleftInjuryDetail" rows="3"
+                placeholder="Please describe your left hand injuries..."></textarea>
+            </div>
+    </div>
+
+    <div id="20" class="panel">
+      <h4>Section 3: Your Right Hand</h4>
+      <p>In this section we are interested in how your right hand looks and the factors influencing that. To perform our
+        research we need a minimum of three images of each hand in specific positions. Other images are optional. We
+        also ask a series of questions about injuries and scarring on the left hand - answering these is optional but
+        doing so will aid in the development of feature recognition algorithms. </p>
+      <p>If you do not have your right hand, please uncheck the box below to skip this section</p>
+
+      <div class="checkbox">
+        <input id="cbxNoRightHand" name="cbxNoRightHand[]" type="checkbox" checked="true" value="noRightHand"
+          onchange="//toggleHandPanel(this.id, 'panelRHFields')">
+        <label for="cbxNoRightHand">
+          Contribute right hand images
+        </label>
+      </div>
+    </div>
+
+    <div id="21" class="panel hideNext">
+      <h4>Right Hand: Rear View</h4>
+
+      <div id="ImageRHD" class="imagePanel" style="background-image: url('images/rhd.jpg')">
+
+      </div>
+      <p>Please take a picture of the rear of your right hand, similar to the example image above. Once your image is
+        taken it will replace the example image.</p>
+
+      <!-- <div style="text-align: center" id="camControlWebcam">
+        <button class="ui-button ui-widget ui-corner-all" onclick="startPhoto('ImageRHD')"><img src="images/camIcon.png"
+            style="padding-right: 5px" alt="camera icon">Take Picture</button>
+      </div> -->
+
+      <div style="text-align: center" id="camControlFile">
+        <label class="camButtonContainer" style="text-align: center">
+          <button class="ui-button ui-widget ui-corner-all"><img src="images/camIcon.png" style="padding-right: 5px"
+              alt="camera icon">Take Picture</button>
+          <input type="file" name="inpRHD" id="inpRHD" accept="image/*" capture="camera"
+            onchange="previewImage('ImageRHD', window.URL.createObjectURL(this.files[0]))">
+        </label>
+      </div>
+    </div>
+
+    <div id="22" class="panel hideNext">
+      <h4>Right Hand: Palm View</h4>
+
+      <div id="ImageRHP" class="imagePanel" style="background-image: url('images/rhp.jpg')">
+
+      </div>
+      <p>Please take a picture of the palm of your right hand, similar to the example image above. Once your image is
+        taken it will replace the example image.</p>
+
+      <!-- <div style="text-align: center" id="camControlWebcam">
+        <button class="ui-button ui-widget ui-corner-all" onclick="startPhoto('ImageRHP')"><img src="images/camIcon.png"
+            style="padding-right: 5px" alt="camera icon">Take Picture</button>
+      </div> -->
+
+      <div style="text-align: center" id="camControlFile">
+        <label class="camButtonContainer" style="text-align: center">
+          <button class="ui-button ui-widget ui-corner-all"><img src="images/camIcon.png" style="padding-right: 5px"
+              alt="camera icon">Take Picture</button>
+          <input type="file" name="inpRHP" id="inpRHP" accept="image/*" capture="camera"
+            onchange="previewImage('ImageRHP', window.URL.createObjectURL(this.files[0]))">
+        </label>
+      </div>
+    </div>
+
+    <div id="23" class="panel hideNext">
+      <h4>Right Hand: Side View</h4>
+
+      <div id="ImageRHS" class="imagePanel" style="background-image: url('images/rhs.jpg')">
+
+      </div>
+      <p>Please take a picture of the side of your right hand, similar to the example image above. Once your image is
+        taken it will replace the example image.</p>
+
+      <!-- <div style="text-align: center" id="camControlWebcam">
+        <button class="ui-button ui-widget ui-corner-all" onclick="startPhoto('ImageRHS')"><img src="images/camIcon.png"
+            style="padding-right: 5px" alt="camera icon">Take Picture</button>
+      </div> -->
+
+      <div style="text-align: center" id="camControlFile">
+        <label class="camButtonContainer" style="text-align: center">
+          <button class="ui-button ui-widget ui-corner-all"><img src="images/camIcon.png" style="padding-right: 5px"
+              alt="camera icon">Take Picture</button>
+          <input type="file" name="inpRHS" id="inpRHS" accept="image/*" capture="camera"
+            onchange="previewImage('ImageRHS', window.URL.createObjectURL(this.files[0]))">
+        </label>
+      </div>
+    </div>
+
+    <div id="24" class="panel">
+      <h4>Right Hand: Angled Rear View</h4>
+
+      <div id="ImageRHAD" class="imagePanel" style="background-image: url('images/rhad.jpg')">
+
+      </div>
+      <p>Please take a picture of the rear of your right hand, held at an approximately 45 degree angle, similar to the
+        example image above. Once your image is
+        taken it will replace the example image.</p>
+
+    <!--   <div style="text-align: center" id="camControlWebcam">
+        <button class="ui-button ui-widget ui-corner-all" onclick="startPhoto('ImageRHAD')"><img
+            src="images/camIcon.png" style="padding-right: 5px" alt="camera icon">Take Picture</button>
+      </div> -->
+
+      <div style="text-align: center" id="camControlFile">
+        <label class="camButtonContainer" style="text-align: center">
+          <button class="ui-button ui-widget ui-corner-all"><img src="images/camIcon.png" style="padding-right: 5px"
+              alt="camera icon">Take Picture</button>
+          <input type="file" name="inpRHAD" id="inpRHAD" accept="image/*" capture="camera"
+            onchange="previewImage('ImageRHAD', window.URL.createObjectURL(this.files[0]))">
+        </label>
+      </div>
+    </div>
+
+    <div id="25" class="panel">
+      <h4>Right Hand: Angled Palm View</h4>
+
+      <div id="ImageRHAP" class="imagePanel" style="background-image: url('images/rhap.jpg')">
+
+      </div>
+      <p>Please take a picture of the palm of your right hand, held at an approximately 45 degree angle, similar to the
+        example image above. Once your image is taken it will replace the example image.</p>
+
+      <!-- <div style="text-align: center" id="camControlWebcam">
+        <button class="ui-button ui-widget ui-corner-all" onclick="startPhoto('ImageRHAP')"><img
+            src="images/camIcon.png" style="padding-right: 5px" alt="camera icon">Take Picture</button>
+      </div> -->
+
+      <div style="text-align: center" id="camControlFile">
+        <label class="camButtonContainer" style="text-align: center">
+          <button class="ui-button ui-widget ui-corner-all"><img src="images/camIcon.png" style="padding-right: 5px"
+              alt="camera icon">Take Picture</button>
+          <input type="file" name="inpRHAP" id="inpRHAP" accept="image/*" capture="camera"
+            onchange="previewImage('ImageRHAP', window.URL.createObjectURL(this.files[0]))">
+        </label>
+      </div>
+    </div>
+
+    <div id="26" class="panel">
+      <h4>Scarring and Injuries</h4>
+      <div id="infoPanelScarRight" class="infoPanel" style="display: inline">
+          <p>Please indicate below if you have visible scarring or have suffered injuries that have visible impct on your right hand.
+          </p>
+        </div>
+
+        <div class="checkbox">
+            <input id="ScarRightSurgical" name="cbxScarRightSurgical" type="checkbox" value="1" class="cbxScar" onclick="toggleScarInjuryDetail('Right', 'Scar')">
+            <label for="ScarRightSurgical">
+              Surgical (e.g. sclerotheraphy)
+            </label>
+          </div>
+    
+          <div class="checkbox">
+            <input id="ScarRightAccidental" name="cbxScarRightAccidental" type="checkbox" value="2" class="cbxScar"
+              onclick="toggleScarInjuryDetail('Right', 'Scar')">
+            <label for="ScarRightAccidental">
+              Accidental (e.g. knife cut)
+            </label>
+          </div>
+
+          <div class="checkboxradio" id="RightScarDetail" style="display: none">
+              <label class="control-label sr-only" for="txtrightScarDetail">Other skin condition</label>
+              <textarea class="textEntryPanel" id="txtRightScarDetail" name="txtRightScarDetail" rows="3"
+                placeholder="Please describe your right hand scars..."></textarea>
+            </div>
+    
+          <div class="checkbox">
+            <input id="InjuryRight" name="cbxInjuryRight" type="checkbox" value="3" class="cbxScar"
+            onclick="toggleScarInjuryDetail('Right', 'Injury')">
+            <label for="InjuryRight">
+              Physical Injury
+            </label>
+          </div>
+
+          <div class="checkboxradio" id="RightInjuryDetail" style="display: none">
+              <label class="control-label sr-only" for="txtrightInjuryDetail">Other skin condition</label>
+              <textarea class="textEntryPanel" id="txtrightInjuryDetail" name="txtrightInjuryDetail" rows="3"
+                placeholder="Please describe your right hand injuries..."></textarea>
+            </div>
+
+    </div>
+
+    <div id="27" class="panel">
+      <h4>Any Other Information</h4>
+      <div id="infoPanelOtherInfo" class="infoPanel" style="display: inline">
+          <p>Please indicate below if you have visible scarring or have suffered injuries that have visible impct on your right hand.
+          </p>
+        </div>
+
+        
+
+          <div class="checkboxradio" id="OtherInfo" style="display: inline">
+              <label class="control-label sr-only" for="Other Info"></label>
+              <textarea class="textEntryPanel" id="txtOtherInfo" name="txtOtherInfo" rows="6"
+                placeholder="Other Information..."></textarea>
+            </div>
+    
+        
+
+    </div>
+
+    <div id="28" class="panel">
+      <div>
+        <img src="images/huqlogo.png"
+          style="border-style: solid; border-width: 1px; border-color: whitesmoke; border-radius: 5px">
+      </div>
+      <div class="infoPanel">
+        <h4>Thank You</h4>
+        <p>We are now ready to transfer your information, please click the button below to proceed.</p>
+      </div>
+
+      <div style="text-align: center" id="submitDataPanel">
+        <label class="camButtonContainer" style="text-align: center">
+          <button class="ui-button ui-widget ui-corner-all" id="btnSubmit" onCLick="submitContribution()">Submit</button>
+          
         </label>
       </div>
     </div>
 
 
-
-
     <!--End of content sections-->
     <div class="ui-footer">
-      <button class="ui-button ui-widget ui-corner-all" onclick="nextClick(-1)" id="btnPrevious"
-        style="display: none">Back</button>
-      <button class="ui-button ui-widget ui-corner-all" onclick="nextClick(1)" id="btnNext">Next</button>
+      <span class="ui-footer-left">
+        <img id="helpIcon" src="images/infoIcon.png" onclick="showHelp(counter);">
+      </span>
+
+      <span class="ui-footer-right">
+        <button class="ui-button ui-widget ui-corner-all" onclick="nextClick(-1)" id="btnPrevious"
+          style="display: none">Back</button>
+        <button class="ui-button ui-widget ui-corner-all" onclick="nextClick(1)" id="btnNext">Next</button>
+      </span>
     </div>
   </div>
-
 
 
 </body>
